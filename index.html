@@ -3,204 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Health Pro - Murat ASLI</title>
+    <title>Health Pro v9 - Murat ASLI</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <style>
         :root {
             --bg: #0f172a; --card: #1e293b; --primary: #38bdf8; --sec: #818cf8; --text: #f8fafc; --dim: #94a3b8; --success: #22c55e; --burn: #fb7185; --water: #0ea5e9;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
-        
-        /* Sayfa Yapısı */
-        .page { display: none; padding: 20px; padding-bottom: 100px; min-height: 100vh; box-sizing: border-box; animation: fadeIn 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        .page { display: none; padding: 20px 15px 100px 15px; min-height: 100vh; box-sizing: border-box; animation: slideUp 0.3s ease; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .card { background: var(--card); border-radius: 25px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
-        h1 { font-size: 1.4rem; text-align: center; background: linear-gradient(to right, var(--primary), var(--sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* Formlar */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 15px; background: #0f172a; border: 2px solid #334155; border-radius: 12px; color: white; box-sizing: border-box; }
-        label { font-size: 0.65rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; }
-        .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; color: white; }
-
-        /* Alt Menü (Tab Bar) */
-        .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); z-index: 1000; }
-        .tab-item { display: flex; flex-direction: column; align-items: center; color: var(--dim); font-size: 0.65rem; cursor: pointer; transition: 0.3s; flex: 1; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card { background: var(--card); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        h1 { font-size: 1.3rem; text-align: center; margin-bottom: 20px; color: var(--primary); }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 14px; background: #0f172a; border: 2px solid #334155; border-radius: 12px; color: white; font-size: 0.9rem; box-sizing: border-box; }
+        label { font-size: 0.65rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; text-transform: uppercase; }
+        
+        .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .tab-bar { position: fixed; bottom: 0; width: 100%; background: #1e293b; display: flex; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .tab-item { flex: 1; text-align: center; color: var(--dim); font-size: 0.6rem; cursor: pointer; }
         .tab-item.active { color: var(--primary); }
-        .tab-icon { font-size: 1.5rem; margin-bottom: 4px; }
-
-        /* Özel Bileşenler */
-        .vke-res { font-size: 3rem; font-weight: 900; text-align: center; margin: 10px 0; }
-        .water-circle { width: 150px; height: 150px; border-radius: 50%; border: 8px solid rgba(14, 165, 233, 0.2); margin: 20px auto; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
-        .water-fill-ui { position: absolute; bottom: 0; width: 100%; background: var(--water); opacity: 0.3; border-radius: 0 0 75px 75px; transition: 0.5s; }
-        .stat-card { text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 15px; }
-
-        .footer { text-align: center; color: var(--dim); font-size: 0.7rem; margin-top: 20px; padding-bottom: 20px; }
+        
+        .res-box { text-align: center; padding: 15px; background: rgba(56, 189, 248, 0.1); border-radius: 15px; border: 1px dashed var(--primary); margin-top: 15px; }
+        .highlight { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; }
+        .log-item { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div id="vke-page" class="page active">
-    <h1>VKE HESAPLA</h1>
+<div id="p-calc" class="page active">
+    <h1>PROFESYONEL ANALİZ</h1>
     <div class="card">
         <div class="grid">
             <div><label>BOY (CM)</label><input type="number" id="h" value="180"></div>
             <div><label>KİLO (KG)</label><input type="number" id="w" value="80"></div>
+            <div><label>YAŞ</label><input type="number" id="age" value="34"></div>
+            <div><label>BOYUN (CM)</label><input type="number" id="neck" value="40"></div>
+            <div style="grid-column: span 2"><label>BEL ÇEVRESİ (CM)</label><input type="number" id="waist" value="90"></div>
         </div>
-        <button class="btn" style="background: var(--primary); color:#0f172a" onclick="calcVKE()">HESAPLA</button>
-        <div id="vke-output" style="display:none; text-align:center; margin-top:20px;">
-            <div class="vke-res" id="vke-num">--</div>
-            <div id="vke-status" style="font-weight:700">İdeal</div>
+        <button class="btn" style="background: var(--primary); color:#0f172a" onclick="profAnalysis()">HESAPLA</button>
+        
+        <div id="analysis-res" class="res-box" style="display:none">
+            <div class="grid">
+                <div><label>YAĞ ORANI</label><span class="highlight" id="res-fat">%--</span></div>
+                <div><label>BAZAL METAB.</label><span class="highlight" id="res-bmr">--</span></div>
+            </div>
+            <p id="analysis-msg" style="font-size:0.75rem; margin-top:10px; color:var(--dim)"></p>
         </div>
-    </div>
-    
-</div>
-
-<div id="water-page" class="page">
-    <h1>SU TAKİBİ</h1>
-    <div class="card" style="text-align:center">
-        <div class="water-circle">
-            <div class="water-fill-ui" id="w-ui" style="height: 0%"></div>
-            <div style="z-index:1; font-weight:900; font-size:1.2rem;" id="w-text">0 ml</div>
-            <div style="z-index:1; font-size:0.7rem; color:var(--dim)" id="w-target-text">Hedef: 2.8L</div>
-        </div>
-        <div class="grid">
-            <button class="btn" style="background:var(--water)" onclick="addWater(200)">+200ml</button>
-            <button class="btn" style="background:var(--water)" onclick="addWater(500)">+500ml</button>
-        </div>
-        <button class="btn" style="background:rgba(255,255,255,0.1); margin-top:10px;" onclick="resetWater()">SIFIRLA</button>
     </div>
 </div>
 
-<div id="food-page" class="page">
+<div id="p-sport" class="page">
+    <h1>GÜNLÜK HAREKET</h1>
+    <div class="card">
+        <label>GÜNLÜK ADIM SAYISI</label>
+        <input type="number" id="steps" value="0" placeholder="Örn: 10000" onchange="updateDailyBurn()">
+        <p style="font-size:0.7rem; color:var(--dim); margin: 10px 0;">Yaklaşık: <span id="step-cal">0</span> kcal</p>
+        
+        <label>EKSTRA SPOR EKLE</label>
+        <select id="sportSel"></select>
+        <div class="grid" style="margin-top:10px">
+            <input type="number" id="sportTime" value="30">
+            <button class="btn" style="background:var(--burn); color:white" onclick="addSport()">EKLE</button>
+        </div>
+        <div id="sport-logs" style="margin-top:15px"></div>
+    </div>
+</div>
+
+<div id="p-food" class="page">
     <h1>BESLENME GÜNLÜĞÜ</h1>
     <div class="card">
-        <label>ÖĞÜN SEÇİN</label>
-        <select id="foodSelect"></select>
+        <label>YEMEK SEÇİN</label>
+        <select id="foodSel"></select>
         <div class="grid" style="margin-top:10px">
             <input type="number" id="foodQty" value="1" step="0.5">
-            <button class="btn" style="background:var(--success)" onclick="addLog('food')">EKLE (+)</button>
+            <button class="btn" style="background:var(--success); color:white" onclick="addFood()">EKLE</button>
         </div>
-        <div id="food-list" style="margin-top:15px"></div>
+        <div id="food-logs" style="margin-top:15px"></div>
     </div>
 </div>
 
-<div id="sport-page" class="page">
-    <h1>SPOR & AKTİVİTE</h1>
+<div id="p-report" class="page">
+    <h1>BİLANÇO & TAHMİN</h1>
     <div class="card">
-        <label>SPOR TÜRÜ</label>
-        <select id="sportSelect"></select>
-        <div class="grid" style="margin-top:10px">
-            <input type="number" id="sportTime" value="30" step="5">
-            <button class="btn" style="background:var(--burn)" onclick="addLog('sport')">YAK (-)</button>
-        </div>
-        <div id="sport-list" style="margin-top:15px"></div>
-    </div>
-    
-</div>
-
-<div id="summary-page" class="page">
-    <h1>GÜNLÜK ÖZET</h1>
-    <div class="card">
-        <div style="text-align:center; margin-bottom:20px">
-            <label>NET DURUM</label>
-            <div style="font-size: 2.5rem; font-weight: 900; color:var(--primary)" id="net-num">0</div>
-            <div id="net-msg" style="font-size:0.8rem; color:var(--dim)">Verileriniz analiz ediliyor...</div>
-        </div>
-        <div class="grid">
-            <div class="stat-card"><div class="stat-val" id="sum-taken">0</div><div class="stat-label">ALINAN</div></div>
-            <div class="stat-card"><div class="stat-val" id="sum-burned">0</div><div class="stat-label">YAKILAN</div></div>
+        <div style="text-align:center">
+            <label>GÜNLÜK NET KALORİ (AÇIK/FAZLA)</label>
+            <div class="highlight" style="font-size:3rem" id="net-cal">0</div>
+            <p id="net-desc" style="font-size:0.8rem"></p>
         </div>
     </div>
-    <div class="footer">
-        <b>Murat ASLI</b><br>Bilişim Teknolojileri Öğretmeni<br>
-        <span class="school-info">Nene Hatun MTAL - 2026</span>
+    <div class="card" style="background: linear-gradient(135deg, #38bdf8, #818cf8); color: #0f172a;">
+        <h3 style="margin:0; font-size:0.9rem;">HAFTALIK PROJEKSİYON</h3>
+        <p style="font-size:0.8rem; margin:10px 0;">Eğer her gün bu şekilde devam ederseniz:</p>
+        <div style="font-size:1.5rem; font-weight:900;" id="week-result">0 gram Değişim</div>
+        <p style="font-size:0.65rem; opacity:0.8; margin-top:5px;">*7000 kalori açığı = 1 kg yağ kaybı hesabıyla hesaplanmıştır.</p>
     </div>
 </div>
 
 <nav class="tab-bar">
-    <div class="tab-item active" onclick="showPage('vke-page')"><span class="tab-icon">⚖️</span><span>VKE</span></div>
-    <div class="tab-item" onclick="showPage('water-page')"><span class="tab-icon">💧</span><span>SU</span></div>
-    <div class="tab-item" onclick="showPage('food-page')"><span class="tab-icon">🍎</span><span>BESİN</span></div>
-    <div class="tab-item" onclick="showPage('sport-page')"><span class="tab-icon">🏃</span><span>SPOR</span></div>
-    <div class="tab-item" onclick="showPage('summary-page')"><span class="tab-icon">📊</span><span>ÖZET</span></div>
+    <div class="tab-item active" onclick="showPage('p-calc')">⚖️<br>ANALİZ</div>
+    <div class="tab-item" onclick="showPage('p-sport')">🏃<br>HAREKET</div>
+    <div class="tab-item" onclick="showPage('p-food')">🍎<br>BESİN</div>
+    <div class="tab-item" onclick="showPage('p-report')">📊<br>RAPOR</div>
 </nav>
 
 <script>
-    const foodDB = [{n:"Yumurta",c:75},{n:"Zeytin",c:8},{n:"Peynir",c:90},{n:"Ekmek",c:70},{n:"Çorba",c:140},{n:"Tavuk Pilav",c:450},{n:"Kebap",c:600},{n:"Meyve",c:90}];
-    const sportDB = [{n:"Yürüyüş",c:6},{n:"Koşu",c:12},{n:"Ağırlık",c:7},{n:"Bisiklet",c:8}];
+    const foodDB = [
+        {n:"[Kahvaltı] Yumurta",c:75}, {n:"[Kahvaltı] Peynir (Dilim)",c:90}, {n:"[Kahvaltı] Zeytin (5 Adet)",c:40},
+        {n:"[Kahvaltı] Yulaf Ezmesi (Pors)",c:150}, {n:"[Öğle] Izgara Tavuk (150g)",c:245}, {n:"[Öğle] Pilav (Pors)",c:350},
+        {n:"[Öğle] Mercimek Çorba",c:140}, {n:"[Akşam] Kırmızı Et (150g)",c:380}, {n:"[Akşam] Salata (Yağlı)",c:120},
+        {n:"[Atıştırmalık] Ceviz/Fındık (Avuç)",c:180}, {n:"[Atıştırmalık] Elma",c:80}, {n:"[Fastfood] Hamburger",c:550}
+    ];
+    const sportDB = [{n:"Ağırlık Ant.",c:7},{n:"Koşu (10km/h)",c:11},{n:"Yüzme",c:10},{n:"Bisiklet",c:8},{n:"HIIT",c:13}];
 
-    let state = { taken: 0, burned: 0, water: 0, logs: [], wTarget: 2800 };
+    let user = { w:80, h:180, age:34, bmr:1800, fat:20, dailyBurn:0, dailyTaken:0, logs:[] };
 
-    function showPage(pageId) {
+    function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        document.querySelectorAll('.tab-item').forEach(t => {
-            t.classList.toggle('active', t.getAttribute('onclick').includes(pageId));
-        });
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.toggle('active', t.getAttribute('onclick').includes(id)));
     }
 
-    function calcVKE() {
-        const h = document.getElementById('h').value / 100;
-        const w = document.getElementById('w').value;
-        const res = (w / (h*h)).toFixed(1);
-        document.getElementById('vke-output').style.display = 'block';
-        document.getElementById('vke-num').innerText = res;
-        state.wTarget = w * 35;
+    function profAnalysis() {
+        const h = parseFloat(document.getElementById('h').value);
+        const w = parseFloat(document.getElementById('w').value);
+        const age = parseInt(document.getElementById('age').value);
+        const neck = parseFloat(document.getElementById('neck').value);
+        const waist = parseFloat(document.getElementById('waist').value);
+
+        // Donanma Yağ Oranı Formülü (Erkek)
+        user.fat = (495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(h))) - 450;
+        // Mifflin-St Jeor BMR
+        user.bmr = (10 * w) + (6.25 * h) - (5 * age) + 5;
+
+        document.getElementById('analysis-res').style.display = 'block';
+        document.getElementById('res-fat').innerText = '%' + user.fat.toFixed(1);
+        document.getElementById('res-bmr').innerText = Math.round(user.bmr) + ' kcal';
         updateUI();
     }
 
-    function addWater(ml) { state.water += ml; updateUI(); }
-    function resetWater() { state.water = 0; updateUI(); }
+    function updateDailyBurn() {
+        const steps = document.getElementById('steps').value;
+        const stepCal = steps * 0.04; // Ortalama 1 adım 0.04 kcal
+        document.getElementById('step-cal').innerText = Math.round(stepCal);
+        calculateTotal();
+    }
 
-    function addLog(type) {
-        if(type === 'food') {
-            const s = document.getElementById('foodSelect');
-            const q = document.getElementById('foodQty').value;
-            const c = Math.round(s.value * q);
-            state.logs.unshift({t:'f', n: s.options[s.selectedIndex].text.split(' -')[0], c});
-            state.taken += c;
-        } else {
-            const s = document.getElementById('sportSelect');
-            const q = document.getElementById('sportTime').value;
-            const c = Math.round(s.value * q);
-            state.logs.unshift({t:'s', n: s.options[s.selectedIndex].text.split(' -')[0], c});
-            state.burned += c;
-        }
+    function addSport() {
+        const s = document.getElementById('sportSel');
+        const t = document.getElementById('sportTime').value;
+        const c = Math.round(s.value * t);
+        user.logs.push({type:'s', n:s.options[s.selectedIndex].text, c});
         updateUI();
+    }
+
+    function addFood() {
+        const s = document.getElementById('foodSel');
+        const q = document.getElementById('foodQty').value;
+        const c = Math.round(s.value * q);
+        user.logs.push({type:'f', n:s.options[s.selectedIndex].text, c});
+        updateUI();
+    }
+
+    function calculateTotal() {
+        const stepCal = document.getElementById('steps').value * 0.04;
+        const sportCal = user.logs.filter(l=>l.type==='s').reduce((a,b)=>a+b.c, 0);
+        const foodCal = user.logs.filter(l=>l.type==='f').reduce((a,b)=>a+b.c, 0);
+        
+        const totalBurn = user.bmr + stepCal + sportCal;
+        const net = foodCal - totalBurn;
+        
+        document.getElementById('net-cal').innerText = (net > 0 ? '+' : '') + Math.round(net);
+        document.getElementById('net-desc').innerText = net > 0 ? "Kalori Fazlası (Kilo Alımı)" : "Kalori Açığı (Yağ Yakımı)";
+        
+        // Haftalık Tahmin
+        const weekGram = (net * 7) / 7.7; // 7.7 kalori = 1 gr yağ dokusu (yaklaşık)
+        document.getElementById('week-result').innerText = Math.abs(Math.round(weekGram)) + " gram " + (net > 0 ? "Alış" : "Veriş");
     }
 
     function updateUI() {
-        // Su
-        document.getElementById('w-text').innerText = state.water + ' ml';
-        document.getElementById('w-target-text').innerText = 'Hedef: ' + (state.wTarget/1000).toFixed(1) + 'L';
-        document.getElementById('w-ui').style.height = Math.min(100, (state.water/state.wTarget)*100) + '%';
-        
-        // Özet
-        const net = state.taken - state.burned;
-        document.getElementById('sum-taken').innerText = state.taken;
-        document.getElementById('sum-burned').innerText = state.burned;
-        document.getElementById('net-num').innerText = net;
-        document.getElementById('net-msg').innerText = net > 0 ? "Enerji Fazlası 🔋" : "Yağ Yakımı Aktif 🔥";
-
-        // Listeler
-        document.getElementById('food-list').innerHTML = state.logs.filter(l=>l.t==='f').map(l=>`<div class="item"><b>${l.n}</b> <span>+${l.c} kcal</span></div>`).join('');
-        document.getElementById('sport-list').innerHTML = state.logs.filter(l=>l.t==='s').map(l=>`<div class="item"><b>${l.n}</b> <span>-${l.c} kcal</span></div>`).join('');
-        
-        localStorage.setItem('healthPro_v8', JSON.stringify(state));
+        document.getElementById('food-logs').innerHTML = user.logs.filter(l=>l.type==='f').map(l=>`<div class="log-item"><span>${l.n}</span><b>+${l.c}</b></div>`).join('');
+        document.getElementById('sport-logs').innerHTML = user.logs.filter(l=>l.type==='s').map(l=>`<div class="log-item"><span>${l.n}</span><b>-${l.c}</b></div>`).join('');
+        calculateTotal();
+        localStorage.setItem('healthPro_v9', JSON.stringify(user));
     }
 
     window.onload = () => {
-        document.getElementById('foodSelect').innerHTML = foodDB.map(f=>`<option value="${f.c}">${f.n} - ${f.c} kcal</option>`).join('');
-        document.getElementById('sportSelect').innerHTML = sportDB.map(s=>`<option value="${s.c}">${s.n} - ${s.c} kcal/dk</option>`).join('');
-        const saved = localStorage.getItem('healthPro_v8');
-        if(saved) { state = JSON.parse(saved); updateUI(); }
+        document.getElementById('foodSel').innerHTML = foodDB.map(f=>`<option value="${f.c}">${f.n}</option>`).join('');
+        document.getElementById('sportSel').innerHTML = sportDB.map(s=>`<option value="${s.c}">${s.n}</option>`).join('');
+        const saved = localStorage.getItem('healthPro_v9');
+        if(saved) { user = JSON.parse(saved); profAnalysis(); }
     };
-
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 </script>
 </body>
 </html>

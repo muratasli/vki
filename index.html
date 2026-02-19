@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VKE Pro - Murat ASLI</title>
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="data:application/manifest+json,{'name':'VKE Pro','short_name':'VKE','display':'standalone','background_color':'#0f172a','theme_color':'#38bdf8'}">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .premium-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
+
+        .gender-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .gender-option {
+            padding: 18px;
+            border: 2px solid #334155;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 700;
+            color: var(--text-dim);
+        }
+
+        .gender-option.active {
+            border-color: var(--primary);
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+        }
+
+        .input-group { margin-bottom: 1.2rem; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1.5px; padding-left: 5px; }
+        
+        input {
+            width: 100%;
+            padding: 20px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 18px;
+            color: white;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); outline: none; }
+
+        .calc-btn {
+            width: 100%;
+            padding: 22px;
+            background: var(--primary);
+            color: #0f172a;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.3);
+            transition: all 0.2s;
+        }
+
+        .calc-btn:active { transform: scale(0.96); }
+
+        #resultArea {
+            margin-top: 2rem;
+            padding: 25px;
+            border-radius: 22px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bmi-val { font-size: 3rem; font-weight: 900; margin: 0; }
+        
+        /* Footer/İmza Alanı */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .footer b { color: var(--text-main); font-weight: 600; }
+        .school-tag {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .status-ideal { background: #22c55e; color: white; }
+        .status-warn { background: #eab308; color: white; }
+        .status-danger { background: #ef4444; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="premium-card">
+    <h1>VKE PRO</h1>
+    <p class="subtitle">Sağlıklı yaşam için ilk adım.</p>
+
+    <div class="gender-selector">
+        <div class="gender-option active" id="male" onclick="setGender('erkek')">ERKEK</div>
+        <div class="gender-option" id="female" onclick="setGender('kadin')">KADIN</div>
+    </div>
+
+    <div class="input-group">
+        <label>BOY (CM)</label>
+        <input type="number" id="height" placeholder="180" inputmode="numeric">
+    </div>
+
+    <div class="input-group">
+        <label>KİLO (KG)</label>
+        <input type="number" id="weight" placeholder="75" inputmode="numeric">
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">HESAPLA</button>
+
+    <div id="resultArea">
+        <p id="bmiResult" class="bmi-val">--</p>
+        <p id="bmiStatus">Normal</p>
+    </div>
+</div>
+
+<div class="footer">
+    <b>Murat ASLI</b><br>
+    Bilişim Teknolojileri Öğretmeni<br>
+    <div class="school-tag">Nene Hatun MTAL | 2026</div>
+</div>
+
+<script>
+    let selectedGender = 'erkek';
+    function setGender(g) {
+        selectedGender = g;
+        document.getElementById('male').classList.toggle('active', g === 'erkek');
+        document.getElementById('female').classList.toggle('active', g === 'kadin');
+    }
+
+    function calculate() {
+        const h = document.getElementById('height').value / 100;
+        const w = document.getElementById('weight').value;
+        const resArea = document.getElementById('resultArea');
+        const bmiRes = document.getElementById('bmiResult');
+        const bmiStat = document.getElementById('bmiStatus');
+
+        if (h > 0 && w > 0) {
+            const bmi = (w / (h * h)).toFixed(1);
+            bmiRes.innerText = bmi;
+            resArea.style.display = 'block';
+
+            let status = "";
+            let css = "";
+
+            if (bmi < 18.5) { status = "Zayıf"; css = "status-warn"; }
+            else if (bmi < 25) { status = "İdeal"; css = "status-ideal"; }
+            else if (bmi < 30) { status = "Kilolu"; css = "status-warn"; }
+            else { status = "Obez"; css = "status-danger"; }
+
+            bmiStat.innerText = `${selectedGender.toUpperCase()} - ${status}`;
+            resArea.className = css;
+        }
+    }
+
+    if ('serviceWorker' in navigator) {
+        const sw = "self.addEventListener('fetch', (e) => {});";
+        const blob = new Blob([sw], {type: 'text/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blob));
+    }
+</script>
+
+</body>
+</html>

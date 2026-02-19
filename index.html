@@ -3,221 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VKE Pro - Murat ASLI</title>
+    <title>Health Pro - Murat ASLI</title>
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
-    <link rel="manifest" href="data:application/manifest+json,{'name':'VKE Pro','short_name':'VKE','display':'standalone','background_color':'#0f172a','theme_color':'#38bdf8'}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
     
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --primary: #38bdf8;
-            --primary-hover: #0ea5e9;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
+            --bg: #0f172a; --card: #1e293b; --primary: #38bdf8; --sec: #818cf8; --text: #f8fafc; --dim: #94a3b8; --success: #22c55e; --burn: #fb7185; --water: #0ea5e9;
         }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .premium-card {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 400px;
-            padding: 2.5rem;
-            border-radius: 28px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p.subtitle { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
-
-        .gender-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-        }
-
-        .gender-option {
-            padding: 18px;
-            border: 2px solid #334155;
-            border-radius: 18px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 700;
-            color: var(--text-dim);
-        }
-
-        .gender-option.active {
-            border-color: var(--primary);
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--primary);
-        }
-
-        .input-group { margin-bottom: 1.2rem; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1.5px; padding-left: 5px; }
-        
-        input {
-            width: 100%;
-            padding: 20px;
-            background: #0f172a;
-            border: 2px solid #334155;
-            border-radius: 18px;
-            color: white;
-            font-size: 1.2rem;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--primary); outline: none; }
-
-        .calc-btn {
-            width: 100%;
-            padding: 22px;
-            background: var(--primary);
-            color: #0f172a;
-            border: none;
-            border-radius: 20px;
-            font-size: 1.3rem;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.3);
-            transition: all 0.2s;
-        }
-
-        .calc-btn:active { transform: scale(0.96); }
-
-        #resultArea {
-            margin-top: 2rem;
-            padding: 25px;
-            border-radius: 22px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .bmi-val { font-size: 3rem; font-weight: 900; margin: 0; }
-        
-        /* Footer/İmza Alanı */
-        .footer {
-            margin-top: 2rem;
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-        .footer b { color: var(--text-main); font-weight: 600; }
-        .school-tag {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            font-size: 0.75rem;
-        }
-
-        .status-ideal { background: #22c55e; color: white; }
-        .status-warn { background: #eab308; color: white; }
-        .status-danger { background: #ef4444; color: white; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .app-container { width: 100%; max-width: 480px; }
+        .card { background: var(--card); border-radius: 28px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        h1 { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        input, select { width: 100%; padding: 14px; background: #0f172a; border: 2px solid #334155; border-radius: 12px; color: white; box-sizing: border-box; font-size: 0.9rem; }
+        label { font-size: 0.65rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; }
+        .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-add { background: var(--success); color: white; }
+        .btn-burn { background: var(--burn); color: white; }
+        .btn-water { background: var(--water); color: white; padding: 10px; font-size: 0.8rem; }
+        .water-card { background: rgba(14, 165, 233, 0.1); border: 1px solid var(--water); border-radius: 20px; padding: 15px; margin-bottom: 15px; text-align: center; }
+        .water-bar { background: rgba(255,255,255,0.1); height: 10px; border-radius: 5px; margin: 10px 0; overflow: hidden; }
+        .water-fill { background: var(--water); height: 100%; width: 0%; transition: 0.5s; }
+        .net-box { background: linear-gradient(135deg, #1e293b, #334155); padding: 15px; border-radius: 18px; text-align: center; margin-bottom: 15px; border: 1px solid var(--primary); }
+        .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 5px; }
+        .stat-box { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 15px; text-align: center; }
+        .stat-val { font-size: 1rem; font-weight: 800; color: var(--primary); display: block; }
+        .stat-label { font-size: 0.55rem; color: var(--dim); }
+        .tab-nav { display:flex; justify-content: space-around; margin-bottom: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 5px; }
+        .tab-btn { padding: 10px 20px; background: none; border: none; color: var(--dim); cursor: pointer; font-weight: 700; border-radius: 10px; flex: 1; }
+        .tab-btn.active { color: white; background: var(--primary); }
+        .list-container { max-height: 200px; overflow-y: auto; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .item { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .del-btn { color: #ef4444; border: none; background: none; cursor: pointer; font-size: 1.2rem; }
+        .footer { text-align: center; color: var(--dim); font-size: 0.75rem; margin-top: 10px; }
+        .school-info { display: inline-block; margin-top: 4px; color: var(--text); font-weight: 600; background: rgba(56, 189, 248, 0.1); padding: 3px 10px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
-<div class="premium-card">
-    <h1>VKE PRO</h1>
-    <p class="subtitle">Sağlıklı yaşam için ilk adım.</p>
-
-    <div class="gender-selector">
-        <div class="gender-option active" id="male" onclick="setGender('erkek')">ERKEK</div>
-        <div class="gender-option" id="female" onclick="setGender('kadin')">KADIN</div>
+<div class="app-container">
+    <div class="card">
+        <h1>Health & Sport Pro</h1>
+        <div class="water-card">
+            <label style="color:var(--water)">💧 GÜNLÜK SU TAKİBİ</label>
+            <div style="font-size: 1.4rem; font-weight: 800;" id="waterText">0 / 0 ml</div>
+            <div class="water-bar"><div class="water-fill" id="waterFill"></div></div>
+            <div style="font-size: 0.7rem; color: var(--dim); margin-bottom: 10px;" id="waterRemainText">Hesaplanıyor...</div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-water" onclick="addWater(200)">+200ml</button>
+                <button class="btn btn-water" onclick="addWater(500)">+500ml</button>
+            </div>
+        </div>
+        <div class="net-box">
+            <label style="color:var(--primary)">GÜNLÜK NET KALORİ</label>
+            <div style="font-size: 2.2rem; font-weight: 900;" id="netCal">0</div>
+            <div style="font-size: 0.75rem; color: var(--dim); margin-top:5px" id="netStatus">Veri girişi yapın.</div>
+        </div>
+        <div class="stats">
+            <div class="stat-box"><span class="stat-val" id="takenCal">0</span><span class="stat-label">ALINAN</span></div>
+            <div class="stat-box"><span class="stat-val" id="burnedCal">0</span><span class="stat-label">YAKILAN</span></div>
+            <div class="stat-box"><span class="stat-val" id="remCal">0</span><span class="stat-label">KALAN</span></div>
+        </div>
     </div>
 
-    <div class="input-group">
-        <label>BOY (CM)</label>
-        <input type="number" id="height" placeholder="180" inputmode="numeric">
+    <div class="card">
+        <div class="grid">
+            <div><label>KİLO (KG)</label><input type="number" id="w" value="80" onchange="initStats()"></div>
+            <div><label>BOY (CM)</label><input type="number" id="h" value="180"></div>
+        </div>
+        <div class="tab-nav">
+            <button class="tab-btn active" id="btn-food" onclick="switchTab('food')">YEMEK</button>
+            <button class="tab-btn" id="btn-sport" onclick="switchTab('sport')">SPOR</button>
+        </div>
+        <div id="foodDiv">
+            <select id="foodSelect"></select>
+            <div class="grid" style="margin-top: 12px;">
+                <input type="number" id="foodQty" value="1" step="0.5">
+                <button class="btn btn-add" onclick="addItem('food')">EKLE</button>
+            </div>
+        </div>
+        <div id="sportDiv" style="display:none;">
+            <select id="sportSelect"></select>
+            <div class="grid" style="margin-top: 12px;">
+                <input type="number" id="sportTime" value="30" step="5">
+                <button class="btn btn-burn" onclick="addItem('sport')">YAK</button>
+            </div>
+        </div>
+        <div class="list-container" id="logList"></div>
     </div>
 
-    <div class="input-group">
-        <label>KİLO (KG)</label>
-        <input type="number" id="weight" placeholder="75" inputmode="numeric">
+    <div class="footer">
+        <b>Murat ASLI</b><br>Bilişim Teknolojileri Öğretmeni<br>
+        <span class="school-info">Nene Hatun MTAL - 2026</span>
     </div>
-
-    <button class="calc-btn" onclick="calculate()">HESAPLA</button>
-
-    <div id="resultArea">
-        <p id="bmiResult" class="bmi-val">--</p>
-        <p id="bmiStatus">Normal</p>
-    </div>
-</div>
-
-<div class="footer">
-    <b>Murat ASLI</b><br>
-    Bilişim Teknolojileri Öğretmeni<br>
-    <div class="school-tag">Nene Hatun MTAL | 2026</div>
 </div>
 
 <script>
-    let selectedGender = 'erkek';
-    function setGender(g) {
-        selectedGender = g;
-        document.getElementById('male').classList.toggle('active', g === 'erkek');
-        document.getElementById('female').classList.toggle('active', g === 'kadin');
+    const foodDB = [
+        { n: "Yumurta", c: 75 }, { n: "Zeytin (1 Ad.)", c: 8 }, { n: "Peynir", c: 90 }, { n: "Ekmek", c: 70 },
+        { n: "Tavuk Pilav", c: 450 }, { n: "Döner/Kebap", c: 600 }, { n: "Meyve", c: 90 }, { n: "Çorba", c: 140 }
+    ];
+    const sportDB = [
+        { n: "Yürüyüş", c: 6 }, { n: "Koşu", c: 12 }, { n: "Ağırlık", c: 7 }, { n: "Bisiklet", c: 8 }
+    ];
+
+    let state = { taken: 0, burned: 0, water: 0, logs: [], target: 2200, waterTarget: 2800 };
+
+    function switchTab(tab) {
+        document.getElementById('foodDiv').style.display = tab === 'food' ? 'block' : 'none';
+        document.getElementById('sportDiv').style.display = tab === 'sport' ? 'block' : 'none';
+        document.getElementById('btn-food').classList.toggle('active', tab === 'food');
+        document.getElementById('btn-sport').classList.toggle('active', tab === 'sport');
     }
 
-    function calculate() {
-        const h = document.getElementById('height').value / 100;
-        const w = document.getElementById('weight').value;
-        const resArea = document.getElementById('resultArea');
-        const bmiRes = document.getElementById('bmiResult');
-        const bmiStat = document.getElementById('bmiStatus');
+    function setupLists() {
+        document.getElementById('foodSelect').innerHTML = foodDB.map(f => `<option value="${f.c}">${f.n} - ${f.c} kcal</option>`).join('');
+        document.getElementById('sportSelect').innerHTML = sportDB.map(s => `<option value="${s.c}">${s.n} - ${s.c} kcal/dk</option>`).join('');
+    }
 
-        if (h > 0 && w > 0) {
-            const bmi = (w / (h * h)).toFixed(1);
-            bmiRes.innerText = bmi;
-            resArea.style.display = 'block';
+    function initStats() {
+        state.waterTarget = document.getElementById('w').value * 35;
+        updateUI();
+    }
 
-            let status = "";
-            let css = "";
+    function addWater(ml) { state.water += ml; updateUI(); }
 
-            if (bmi < 18.5) { status = "Zayıf"; css = "status-warn"; }
-            else if (bmi < 25) { status = "İdeal"; css = "status-ideal"; }
-            else if (bmi < 30) { status = "Kilolu"; css = "status-warn"; }
-            else { status = "Obez"; css = "status-danger"; }
-
-            bmiStat.innerText = `${selectedGender.toUpperCase()} - ${status}`;
-            resArea.className = css;
+    function addItem(type) {
+        if (type === 'food') {
+            const sel = document.getElementById('foodSelect');
+            const qty = parseFloat(document.getElementById('foodQty').value);
+            const cal = Math.round(sel.value * qty);
+            state.logs.unshift({ type, n: sel.options[sel.selectedIndex].text.split(' -')[0], cal, qty });
+            state.taken += cal;
+        } else {
+            const sel = document.getElementById('sportSelect');
+            const time = parseFloat(document.getElementById('sportTime').value);
+            const cal = Math.round(sel.value * time);
+            state.logs.unshift({ type, n: sel.options[sel.selectedIndex].text.split(' -')[0], cal, qty: time });
+            state.burned += cal;
         }
+        updateUI();
     }
 
+    function deleteItem(i) {
+        const item = state.logs[i];
+        if (item.type === 'food') state.taken -= item.cal; else state.burned -= item.cal;
+        state.logs.splice(i, 1);
+        updateUI();
+    }
+
+    function updateUI() {
+        const net = state.taken - state.burned;
+        document.getElementById('takenCal').innerText = state.taken;
+        document.getElementById('burnedCal').innerText = state.burned;
+        document.getElementById('remCal').innerText = Math.max(0, state.target - net);
+        document.getElementById('netCal').innerText = net;
+        document.getElementById('waterText').innerText = `${state.water} / ${Math.round(state.waterTarget)} ml`;
+        document.getElementById('waterFill').style.width = Math.min(100, (state.water / state.waterTarget) * 100) + '%';
+        document.getElementById('logList').innerHTML = state.logs.map((l, i) => `
+            <div class="item" style="border-left: 5px solid ${l.type === 'food' ? 'var(--success)' : 'var(--burn)'}">
+                <span><b>${l.n}</b><br>${l.qty} ${l.type === 'food' ? 'Birim' : 'Dk'} | ${l.cal} kcal</span>
+                <button class="del-btn" onclick="deleteItem(${i})">✕</button>
+            </div>`).join('');
+        localStorage.setItem('healthPro_Final_PWA', JSON.stringify(state));
+    }
+
+    // Service Worker Kaydı
     if ('serviceWorker' in navigator) {
-        const sw = "self.addEventListener('fetch', (e) => {});";
-        const blob = new Blob([sw], {type: 'text/javascript'});
-        navigator.serviceWorker.register(URL.createObjectURL(blob));
+        navigator.serviceWorker.register('sw.js');
     }
-</script>
 
+    window.onload = () => {
+        setupLists();
+        const saved = localStorage.getItem('healthPro_Final_PWA');
+        if(saved) state = JSON.parse(saved);
+        initStats();
+    };
+</script>
 </body>
 </html>

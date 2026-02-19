@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Health Pro v9 - Murat ASLI</title>
+    <title>Health Pro v10 - Murat ASLI</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <style>
@@ -29,7 +29,7 @@
         
         .res-box { text-align: center; padding: 15px; background: rgba(56, 189, 248, 0.1); border-radius: 15px; border: 1px dashed var(--primary); margin-top: 15px; }
         .highlight { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; }
-        .log-item { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; font-size: 0.8rem; }
+        .log-item { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; font-size: 0.8rem; border-left: 3px solid var(--success); }
     </style>
 </head>
 <body>
@@ -45,41 +45,37 @@
             <div style="grid-column: span 2"><label>BEL ÇEVRESİ (CM)</label><input type="number" id="waist" value="90"></div>
         </div>
         <button class="btn" style="background: var(--primary); color:#0f172a" onclick="profAnalysis()">HESAPLA</button>
-        
         <div id="analysis-res" class="res-box" style="display:none">
             <div class="grid">
                 <div><label>YAĞ ORANI</label><span class="highlight" id="res-fat">%--</span></div>
                 <div><label>BAZAL METAB.</label><span class="highlight" id="res-bmr">--</span></div>
             </div>
-            <p id="analysis-msg" style="font-size:0.75rem; margin-top:10px; color:var(--dim)"></p>
         </div>
     </div>
 </div>
 
 <div id="p-sport" class="page">
-    <h1>GÜNLÜK HAREKET</h1>
+    <h1>HAREKET & ADIM</h1>
     <div class="card">
         <label>GÜNLÜK ADIM SAYISI</label>
-        <input type="number" id="steps" value="0" placeholder="Örn: 10000" onchange="updateDailyBurn()">
-        <p style="font-size:0.7rem; color:var(--dim); margin: 10px 0;">Yaklaşık: <span id="step-cal">0</span> kcal</p>
-        
-        <label>EKSTRA SPOR EKLE</label>
+        <input type="number" id="steps" value="0" onchange="calculateTotal()">
+        <br>
+        <label>EKSTRA SPOR</label>
         <select id="sportSel"></select>
         <div class="grid" style="margin-top:10px">
             <input type="number" id="sportTime" value="30">
             <button class="btn" style="background:var(--burn); color:white" onclick="addSport()">EKLE</button>
         </div>
-        <div id="sport-logs" style="margin-top:15px"></div>
     </div>
 </div>
 
 <div id="p-food" class="page">
-    <h1>BESLENME GÜNLÜĞÜ</h1>
+    <h1>PİŞİRME ODAKLI BESİN GÜNLÜĞÜ</h1>
     <div class="card">
-        <label>YEMEK SEÇİN</label>
+        <label>ÖĞÜN SEÇİN (PİŞİRME YÖNTEMİNE GÖRE)</label>
         <select id="foodSel"></select>
         <div class="grid" style="margin-top:10px">
-            <input type="number" id="foodQty" value="1" step="0.5">
+            <input type="number" id="foodQty" value="1" step="0.5" placeholder="Adet/Porsiyon">
             <button class="btn" style="background:var(--success); color:white" onclick="addFood()">EKLE</button>
         </div>
         <div id="food-logs" style="margin-top:15px"></div>
@@ -90,16 +86,14 @@
     <h1>BİLANÇO & TAHMİN</h1>
     <div class="card">
         <div style="text-align:center">
-            <label>GÜNLÜK NET KALORİ (AÇIK/FAZLA)</label>
+            <label>NET KALORİ (AÇIK/FAZLA)</label>
             <div class="highlight" style="font-size:3rem" id="net-cal">0</div>
             <p id="net-desc" style="font-size:0.8rem"></p>
         </div>
     </div>
-    <div class="card" style="background: linear-gradient(135deg, #38bdf8, #818cf8); color: #0f172a;">
-        <h3 style="margin:0; font-size:0.9rem;">HAFTALIK PROJEKSİYON</h3>
-        <p style="font-size:0.8rem; margin:10px 0;">Eğer her gün bu şekilde devam ederseniz:</p>
-        <div style="font-size:1.5rem; font-weight:900;" id="week-result">0 gram Değişim</div>
-        <p style="font-size:0.65rem; opacity:0.8; margin-top:5px;">*7000 kalori açığı = 1 kg yağ kaybı hesabıyla hesaplanmıştır.</p>
+    <div class="card" style="background: linear-gradient(135deg, #38bdf8, #818cf8); color: #0f172a; text-align:center">
+        <h3 style="margin:0; font-size:0.9rem;">HAFTALIK TAHMİN</h3>
+        <div style="font-size:1.5rem; font-weight:900; margin:10px 0;" id="week-result">0 gram Değişim</div>
     </div>
 </div>
 
@@ -111,15 +105,42 @@
 </nav>
 
 <script>
+    // KRİTİK VERİ SETİ: Yağ ve Pişirme Yöntemi Bazlı
     const foodDB = [
-        {n:"[Kahvaltı] Yumurta",c:75}, {n:"[Kahvaltı] Peynir (Dilim)",c:90}, {n:"[Kahvaltı] Zeytin (5 Adet)",c:40},
-        {n:"[Kahvaltı] Yulaf Ezmesi (Pors)",c:150}, {n:"[Öğle] Izgara Tavuk (150g)",c:245}, {n:"[Öğle] Pilav (Pors)",c:350},
-        {n:"[Öğle] Mercimek Çorba",c:140}, {n:"[Akşam] Kırmızı Et (150g)",c:380}, {n:"[Akşam] Salata (Yağlı)",c:120},
-        {n:"[Atıştırmalık] Ceviz/Fındık (Avuç)",c:180}, {n:"[Atıştırmalık] Elma",c:80}, {n:"[Fastfood] Hamburger",c:550}
+        // Kahvaltılık & Yağlar
+        {n: "Zeytinyağı (1 Tatlı Kaşığı)", c: 45},
+        {n: "Tereyağı (1 Tatlı Kaşığı)", c: 35},
+        {n: "Omlet - 3 Yumurta (Az Yağlı)", c: 260},
+        {n: "Omlet - 4 Yumurta (Az Yağlı)", c: 335},
+        {n: "Omlet - 5 Yumurta (Az Yağlı)", c: 410},
+        {n: "Omlet - Tereyağlı 3 Yumurta", c: 310},
+        {n: "Omlet - Tereyağlı 4 Yumurta", c: 385},
+        
+        // Tavuk & Et (Pişirme Yöntemine Göre)
+        {n: "Tavuk Göğsü - Haşlanmış (150g)", c: 195},
+        {n: "Tavuk Göğsü - Izgara (Yağsız 150g)", c: 210},
+        {n: "Tavuk Göğsü - Tavada (1 TK Yağlı)", c: 260},
+        {n: "Tavuk Göğsü - Yağda Kızarmış", c: 350},
+        {n: "Kıyma - Az Yağlı (100g)", c: 190},
+        {n: "Kıyma - Orta Yağlı (100g)", c: 250},
+        {n: "Fırın Köfte (Az Yağlı - 1 Adet)", c: 55},
+        
+        // Pilav & Patates
+        {n: "Pirinç Pilavı - Tereyağlı (Pors)", c: 360},
+        {n: "Pirinç Pilavı - Az Yağlı (Pors)", c: 280},
+        {n: "Bulgur Pilavı - Sebzeli (Pors)", c: 250},
+        {n: "Patates - Fırın (Baharatlı/Az Yağlı)", c: 160},
+        {n: "Patates - Kızartma (Porsiyon)", c: 450},
+        {n: "Haşlanmış Patates (1 Orta Boy)", c: 110},
+        
+        // Diğer
+        {n: "Ekmek - 1 Dilim", c: 70},
+        {n: "Yoğurt - Yarım Yağlı (Kase)", c: 115}
     ];
-    const sportDB = [{n:"Ağırlık Ant.",c:7},{n:"Koşu (10km/h)",c:11},{n:"Yüzme",c:10},{n:"Bisiklet",c:8},{n:"HIIT",c:13}];
 
-    let user = { w:80, h:180, age:34, bmr:1800, fat:20, dailyBurn:0, dailyTaken:0, logs:[] };
+    const sportDB = [{n:"Ağırlık Ant.",c:7},{n:"Yürüyüş",c:5},{n:"Koşu",c:11}];
+
+    let user = { w:80, h:180, age:34, bmr:1800, logs:[] };
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -134,30 +155,13 @@
         const neck = parseFloat(document.getElementById('neck').value);
         const waist = parseFloat(document.getElementById('waist').value);
 
-        // Donanma Yağ Oranı Formülü (Erkek)
-        user.fat = (495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(h))) - 450;
-        // Mifflin-St Jeor BMR
+        let fat = (495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(h))) - 450;
         user.bmr = (10 * w) + (6.25 * h) - (5 * age) + 5;
 
         document.getElementById('analysis-res').style.display = 'block';
-        document.getElementById('res-fat').innerText = '%' + user.fat.toFixed(1);
+        document.getElementById('res-fat').innerText = '%' + fat.toFixed(1);
         document.getElementById('res-bmr').innerText = Math.round(user.bmr) + ' kcal';
-        updateUI();
-    }
-
-    function updateDailyBurn() {
-        const steps = document.getElementById('steps').value;
-        const stepCal = steps * 0.04; // Ortalama 1 adım 0.04 kcal
-        document.getElementById('step-cal').innerText = Math.round(stepCal);
         calculateTotal();
-    }
-
-    function addSport() {
-        const s = document.getElementById('sportSel');
-        const t = document.getElementById('sportTime').value;
-        const c = Math.round(s.value * t);
-        user.logs.push({type:'s', n:s.options[s.selectedIndex].text, c});
-        updateUI();
     }
 
     function addFood() {
@@ -165,6 +169,14 @@
         const q = document.getElementById('foodQty').value;
         const c = Math.round(s.value * q);
         user.logs.push({type:'f', n:s.options[s.selectedIndex].text, c});
+        updateUI();
+    }
+
+    function addSport() {
+        const s = document.getElementById('sportSel');
+        const t = document.getElementById('sportTime').value;
+        const c = Math.round(s.value * t);
+        user.logs.push({type:'s', n:s.options[s.selectedIndex].text, c});
         updateUI();
     }
 
@@ -177,25 +189,23 @@
         const net = foodCal - totalBurn;
         
         document.getElementById('net-cal').innerText = (net > 0 ? '+' : '') + Math.round(net);
-        document.getElementById('net-desc').innerText = net > 0 ? "Kalori Fazlası (Kilo Alımı)" : "Kalori Açığı (Yağ Yakımı)";
+        document.getElementById('net-desc').innerText = net > 0 ? "Kalori Fazlası" : "Kalori Açığı";
         
-        // Haftalık Tahmin
-        const weekGram = (net * 7) / 7.7; // 7.7 kalori = 1 gr yağ dokusu (yaklaşık)
-        document.getElementById('week-result').innerText = Math.abs(Math.round(weekGram)) + " gram " + (net > 0 ? "Alış" : "Veriş");
+        const weekGram = (net * 7) / 7.7;
+        document.getElementById('week-result').innerText = Math.abs(Math.round(weekGram)) + " gr " + (net > 0 ? "Alış" : "Veriş");
+        localStorage.setItem('healthPro_v10', JSON.stringify(user));
     }
 
     function updateUI() {
-        document.getElementById('food-logs').innerHTML = user.logs.filter(l=>l.type==='f').map(l=>`<div class="log-item"><span>${l.n}</span><b>+${l.c}</b></div>`).join('');
-        document.getElementById('sport-logs').innerHTML = user.logs.filter(l=>l.type==='s').map(l=>`<div class="log-item"><span>${l.n}</span><b>-${l.c}</b></div>`).join('');
+        document.getElementById('food-logs').innerHTML = user.logs.filter(l=>l.type==='f').map((l,i)=>`<div class="log-item">${l.n} <b>+${l.c}</b></div>`).join('');
         calculateTotal();
-        localStorage.setItem('healthPro_v9', JSON.stringify(user));
     }
 
     window.onload = () => {
         document.getElementById('foodSel').innerHTML = foodDB.map(f=>`<option value="${f.c}">${f.n}</option>`).join('');
         document.getElementById('sportSel').innerHTML = sportDB.map(s=>`<option value="${s.c}">${s.n}</option>`).join('');
-        const saved = localStorage.getItem('healthPro_v9');
-        if(saved) { user = JSON.parse(saved); profAnalysis(); }
+        const saved = localStorage.getItem('healthPro_v10');
+        if(saved) { user = JSON.parse(saved); profAnalysis(); updateUI(); }
     };
 </script>
 </body>
